@@ -45,17 +45,28 @@ This library is designed for organizations handling Controlled Unclassified Info
 ## Architecture
 
 ```mermaid
-graph TD
-    A[Authoritative Sources] -->|Ingest| B[Canonical Control Library]
-    B -->|Map| C[Crosswalk Engine]
-    C -->|NIST 800-171| D[ITAR/EAR]
-    C -->|SOC 2| E[FedRAMP]
-    C -->|ISO 27001| F[CMMC L2]
-    B -->|Define| G[Evidence Data Dictionary]
-    G -->|Validate| H[Continuous Monitoring Detectors]
-    H -->|Output| I[Evidence Store]
-    I -->|Ground| J[AI Compliance Copilot]
-    J -->|Publish| K[Trust Center or Audit Package]
+flowchart TD
+
+A[Compliance Framework Sources] --> B[Canonical Control Library]
+
+B --> C[Framework Crosswalk Engine]
+
+C --> D[NIST 800-53]
+C --> E[NIST 800-171]
+C --> F[SOC2]
+C --> G[ISO 27001]
+C --> H[CMMC Level 2]
+C --> I[AI Governance Frameworks]
+
+B --> J[Evidence Data Dictionary]
+
+J --> K[Continuous Monitoring Detectors]
+
+K --> L[Evidence Store]
+
+L --> M[AI Compliance Copilot]
+
+M --> N[Trust Center and Audit Artifacts]
 
 Author
 Victor Adeleke
