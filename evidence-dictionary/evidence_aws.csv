@@ -1,0 +1,1 @@
+evidence_id,control_id,evidence_name,aws_service,aws_resource_type,collection_method,aws_cli_example,terraform_example
