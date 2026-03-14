@@ -42,6 +42,9 @@ This library is designed for organizations handling Controlled Unclassified Info
 - **ISO/IEC 42001:2023:** AI Management System controls aligned with ISO 27001 structure
 - **Data Residency for AI:** Training vs. inference boundary tagging for cross-border deployment
 
+
+The architecture below illustrates how canonical controls enable multi-framework governance, automated evidence collection, and AI-assisted compliance workflows.
+
 ## Architecture
 
 ```mermaid
