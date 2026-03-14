@@ -1,1 +1,6 @@
-evidence_id,control_id,evidence_name,azure_service,azure_resource_type,collection_method,azure_cli_example
+"evidence_id","control_id","evidence_name","azure_service","azure_resource_type","collection_method","azure_cli_example"
+"EV-IAM-01-AZURE","CC-IAM-01","Entra ID User Inventory","Microsoft Entra ID","User","az ad user list","az ad user list --query '[].{userPrincipalName:userPrincipalName;accountEnabled:accountEnabled}'"
+"EV-IAM-02-AZURE","CC-IAM-02","MFA Registration Status","Microsoft Entra ID","UserAuthenticationMethod","az ad user authentication-method list","az ad user authentication-method list --upn <upn>"
+"EV-LOG-01-AZURE","CC-LOG-01","Activity Log Export","Azure Monitor","ActivityLog","az monitor activity-log list","az monitor activity-log list --start-time <date> --end-time <date>"
+"EV-ENC-01-AZURE","CC-ENC-01","Key Vault Access Policy","Azure Key Vault","Vault","az keyvault show","az keyvault show --name <vault-name> --query 'properties.accessPolicies'"
+"EV-SEG-01-AZURE","CC-SEG-01","NSG Flow Logs","Azure Network Watcher","FlowLog","az network watcher flow-log show","az network watcher flow-log show --resource-group <rg> --name <flowlog-name>"

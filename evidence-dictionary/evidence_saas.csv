@@ -1,1 +1,6 @@
-evidence_id,control_id,evidence_name,saas_platform,data_source,collection_method,api_example
+"evidence_id","control_id","evidence_name","saas_platform","data_source","collection_method","api_example"
+"EV-SAAS-IAM-01","CC-IAM-01","Okta User Inventory","Okta","/api/v1/users","GET /api/v1/users","curl -H \"Authorization: SSWS <token>\" https://<org>.okta.com/api/v1/users"
+"EV-SAAS-IAM-02","CC-IAM-02","Okta MFA Policy","Okta","/api/v1/policies","GET /api/v1/policies?type=MFA_ENROLL","curl -H \"Authorization: SSWS <token>\" https://<org>.okta.com/api/v1/policies?type=MFA_ENROLL"
+"EV-SAAS-LOG-01","CC-LOG-01","GitHub Audit Log","GitHub","/orgs/{org}/audit-log","GET /orgs/{org}/audit-log","curl -H \"Authorization: Bearer <token>\" https://api.github.com/orgs/{org}/audit-log"
+"EV-SAAS-VENDOR-01","CC-VENDOR-01","Vendor Security Questionnaire","SecurityScorecard","/v2/companies","GET /v2/companies/{domain}","curl -H \"x-api-key: <key>\" https://api.securityscorecard.io/v2/companies/{domain}"
+"EV-SAAS-POLICY-01","CC-POLICY-01","Policy Acknowledgment Records","KnowBe4","/users","GET /users/{id}/training","curl -H \"Authorization: Bearer <token>\" https://api.knowbe4.com/v1/users/{id}/training"

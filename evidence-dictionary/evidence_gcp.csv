@@ -1,1 +1,6 @@
-evidence_id,control_id,evidence_name,gcp_service,gcp_resource_type,collection_method,gcloud_example
+"evidence_id","control_id","evidence_name","gcp_service","gcp_resource_type","collection_method","gcloud_example"
+"EV-IAM-01-GCP","CC-IAM-01","Cloud IAM User Inventory","Cloud IAM","ServiceAccount","gcloud iam service-accounts list","gcloud iam service-accounts list --format='table(email;disabled)'"
+"EV-IAM-02-GCP","CC-IAM-02","MFA Enforcement","Cloud Identity","User","gcloud identity users list","gcloud identity users list --query='users[*].{name:primaryEmail;verified:verified}'"
+"EV-LOG-01-GCP","CC-LOG-01","Cloud Audit Logs","Cloud Logging","LogEntry","gcloud logging read","gcloud logging read 'logName=projects/<project>/logs/cloudaudit.googleapis.com%2Factivity' --limit=10"
+"EV-ENC-01-GCP","CC-ENC-01","Cloud KMS Key Metadata","Cloud KMS","CryptoKey","gcloud kms keys list","gcloud kms keys list --keyring <keyring> --location global --format='table(name;purpose;rotationPeriod)'"
+"EV-SEG-01-GCP","CC-SEG-01","VPC Firewall Rules","Compute Engine","Firewall","gcloud compute firewall-rules list","gcloud compute firewall-rules list --format='table(name;direction;sourceRanges;targetTags)'"
