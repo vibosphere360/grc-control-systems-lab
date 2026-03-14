@@ -1,14 +1,14 @@
-#  GRC Control Systems Lab
+# 🛡️ GRC Control Systems Lab
 
 > **Open-source GRC platform prototype: Canonical controls, crosswalks, and automated evidence for aerospace, defense, and commercial cloud environments.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Status: Phase 2 Complete](https://img.shields.io/badge/Status-Phase%202%20Complete-blue)]()
-[![Frameworks](https://img.shields.io/badge/Frameworks-NIST|SOC2|ISO|CMMC|AI%20RMF-green)]()
+[![Frameworks](https://img.shields.io/badge/Frameworks-NIST%7CSOC2%7CISO%7CCMMC%7CAI%20RMF-green)]()
 
 This repository demonstrates how modern compliance platforms (Vanta, Drata, Secureframe) implement continuous compliance and multi-framework governance.
 
-##  The Lab Includes
+## 📦 The Lab Includes
 
 | Module | Status | Description |
 | :--- | :--- | :--- |
@@ -19,30 +19,30 @@ This repository demonstrates how modern compliance platforms (Vanta, Drata, Secu
 | **AI-Assisted Compliance Guidance** | ⚪ Planned | Prompt libraries grounded in canonical controls |
 | **Trust Center Architecture** | ⚪ Planned | Customer-facing artifacts + audit package generation |
 
-##  Frameworks Covered
+## 🗺️ Frameworks Covered
 
 ### Core Compliance
 - **Federal:** NIST 800-53 Rev 5, NIST 800-171 Rev 2, CMMC 2.0 Level 2, FedRAMP
 - **Commercial:** SOC 2 Type II, ISO/IEC 27001:2022
-- **AI Governance:** **ISO/IEC 42001:2023**, **NIST AI RMF (GOVERN/MAP/MEASURE/MANAGE)**
+- **AI Governance:** ISO/IEC 42001:2023, NIST AI RMF (GOVERN/MAP/MEASURE/MANAGE)
 - **Planned:** NIST CSF, PCI DSS 4.0, HIPAA, GDPR/CCPA
 
-##  Aerospace & Defense Focus
+## 🎯 Aerospace & Defense Focus
 
-This library is designed for organizations handling Controlled Unclassified Information (CUI) and export-controlled technical 
+This library is designed for organizations handling Controlled Unclassified Information (CUI) and export-controlled technical data:
 
 - **NIST 800-171:** CUI protection requirements for DoD contractors
 - **ITAR/EAR:** Export control patterns for technical data segregation
 - **CMMC 2.0 Level 2:** Cybersecurity maturity for Defense Industrial Base
 - **Data Residency Tagging:** Controls tagged `Global`/`US`/`Restricted` for boundary enforcement
 
-##  AI Governance Extension
+## 🤖 AI Governance Extension
 
 - **NIST AI RMF (2023):** Mapped via GOVERN, MAP, MEASURE, MANAGE functions
 - **ISO/IEC 42001:2023:** AI Management System controls aligned with ISO 27001 structure
 - **Data Residency for AI:** Training vs. inference boundary tagging for cross-border deployment
 
-##  Architecture
+## 🏗️ Architecture
 
 ```mermaid
 graph TD
@@ -55,11 +55,11 @@ graph TD
     G -->|Validate| H[Continuous Monitoring Detectors]
     H -->|Output| I[Evidence Store]
     I -->|Ground| J[AI Compliance Copilot]
-    J -->|Publish| K[Trust Center / Audit Package]
+    J -->|Publish| K[Trust Center / Audit Package]    
 
-Author
+👤 Author
 Victor Adeleke
 Security Risk & Compliance Architect | Cloud, AI & Export Control Governance
 🌐 grcsecuritycontrols.com
- LinkedIn https://www.linkedin.com/in/victor-adeleke-214083177/
- victorsreops@gmail.com
+💼 LinkedIn
+📧 victorsreops@gmail.com
