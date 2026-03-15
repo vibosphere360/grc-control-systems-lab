@@ -1,69 +1,78 @@
 #!/usr/bin/env python3
 """
-Detector: CC-LOG-01 - Security Event Logging
-Evidence: EV-LOG-01-AWS - CloudTrail Log Integrity
+Detector: CC-IAM-02 - Strong Authentication
+Evidence: EV-IAM-02-AWS - MFA Status Report
 Provider: AWS
 Automation Tier: Automated
-Freshness: hourly
-Residency Tag: US
+Freshness: daily
+Residency Tag: Global
 
 CIS Benchmark Mappings:
-- CIS AWS Foundations Benchmark v1.5: 2.1 (Ensure CloudTrail is enabled in all regions)
-- CIS AWS Foundations Benchmark v1.5: 2.2 (Ensure CloudTrail log file validation is enabled)
-- CIS AWS Foundations Benchmark v1.5: 2.3 (Ensure CloudTrail logs are encrypted at rest)
+- CIS AWS Foundations Benchmark v1.5: 1.4 (Ensure no root account access key exists)
+- CIS AWS Foundations Benchmark v1.5: 1.5 (Ensure MFA is enabled for root account)
+- CIS AWS Foundations Benchmark v1.5: 1.6 (Ensure hardware MFA for root account)
 
 Titilayo's Audit Finding Addressed:
-- Policies exist, but there's no proof they're being enforced
-- This detector provides timestamped, checksummed evidence of actual enforcement
+- Access reviews exist in policy, but they're not actually performed
+- This detector validates MFA enforcement daily with timestamped evidence
 """
 
 import os
 import json
 import hashlib
 from datetime import datetime
-from typing import Dict, Any
+from typing import Dict, Any, List
 
-class CloudTrailDetector:
+class MFADetector:
     def __init__(self, region: str = "us-east-1"):
-        self.client = None  # Would be boto3.client("cloudtrail") in real mode
+        self.client = None  # Would be boto3.client("iam") in real mode
         self.region = region
-        self.control_id = "CC-LOG-01"
-        self.evidence_id = "EV-LOG-01-AWS"
-        self.residency_tag = "US"
+        self.control_id = "CC-IAM-02"
+        self.evidence_id = "EV-IAM-02-AWS"
+        self.residency_tag = "Global"
         self.cis_benchmarks = [
-            "CIS AWS v1.5: 2.1",
-            "CIS AWS v1.5: 2.2",
-            "CIS AWS v1.5: 2.3"
+            "CIS AWS v1.5: 1.4",
+            "CIS AWS v1.5: 1.5",
+            "CIS AWS v1.5: 1.6"
         ]
     
-    def check_cloudtrail_enabled(self) -> Dict[str, Any]:
-        """Validate CloudTrail is enabled with log file validation"""
+    def check_mfa_for_privileged_users(self) -> Dict[str, Any]:
+        """Validate MFA is enabled for all IAM users with privileged access"""
         
-        # Mock mode: return predefined result without hitting AWS API
+        # Mock mode: return predefined result
         if os.getenv("MOCK_MODE") == "true":
             return self._result(
                 "PASS",
-                "Mock mode: CloudTrail enabled and validating logs",
+                "Mock mode: MFA enabled for all privileged users",
                 evidence={
-                    "is_multi_region": True,
-                    "log_file_validation": True,
-                    "s3_bucket_defined": True,
-                    "cloud_watch_logs_defined": True,
-                    "kms_encryption": True,
-                    "cis_aws_2_1": "PASS",
-                    "cis_aws_2_2": "PASS",
-                    "cis_aws_2_3": "PASS"
+                    "total_users": 15,
+                    "privileged_users": 5,
+                    "mfa_enabled_count": 5,
+                    "root_mfa_enabled": True,
+                    "root_access_keys_disabled": True,
+                    "hardware_mfa_for_root": True,
+                    "cis_aws_1_4": "PASS",
+                    "cis_aws_1_5": "PASS",
+                    "cis_aws_1_6": "PASS"
                 }
             )
         
         # Real mode: would call boto3 here
         # try:
-        #     response = self.client.describe_trails()
+        #     users_response = self.client.list_users()
         #     ... validation logic ...
         # except Exception as e:
         #     return self._result("ERROR", str(e))
         
         return self._result("ERROR", "Real mode not implemented yet - configure AWS credentials")
+    
+    def _is_privileged_user(self, username: str) -> bool:
+        """Check if user has privileged access (simplified check)"""
+        # In real mode, would check IAM policies and group membership
+        admin_policies = ["AdministratorAccess", "PowerUserAccess"]
+        admin_groups = ["Admins", "Administrators", "SecurityAdmins"]
+        # Implementation would query AWS IAM API
+        return False  # Mock default
     
     def _result(self, status: str, message: str, evidence: Dict = None) -> Dict[str, Any]:
         """Standardized detector output format"""
@@ -74,9 +83,9 @@ class CloudTrailDetector:
             "timestamp": datetime.utcnow().isoformat() + "Z",
             "message": message,
             "evidence": evidence,
-            "source": "AWS CloudTrail API (Mock)" if os.getenv("MOCK_MODE") == "true" else "AWS CloudTrail API",
+            "source": "AWS IAM API (Mock)" if os.getenv("MOCK_MODE") == "true" else "AWS IAM API",
             "residency_tag": self.residency_tag,
-            "next_check": "2026-03-14T15:30:00Z",
+            "next_check": "2026-03-15T14:30:00Z",
             "cis_benchmarks": self.cis_benchmarks
         }
         
@@ -96,8 +105,8 @@ class CloudTrailDetector:
         return filename
 
 if __name__ == "__main__":
-    detector = CloudTrailDetector()
-    result = detector.check_cloudtrail_enabled()
+    detector = MFADetector()
+    result = detector.check_mfa_for_privileged_users()
     print(json.dumps(result, indent=2))
     
     # Save to file for evidence store

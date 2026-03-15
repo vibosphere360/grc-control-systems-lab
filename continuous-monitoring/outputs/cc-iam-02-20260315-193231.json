@@ -1,0 +1,27 @@
+{
+  "control_id": "CC-IAM-02",
+  "evidence_id": "EV-IAM-02-AWS",
+  "status": "PASS",
+  "timestamp": "2026-03-15T19:32:31.323169Z",
+  "message": "Mock mode: MFA enabled for all privileged users",
+  "evidence": {
+    "total_users": 15,
+    "privileged_users": 5,
+    "mfa_enabled_count": 5,
+    "root_mfa_enabled": true,
+    "root_access_keys_disabled": true,
+    "hardware_mfa_for_root": true,
+    "cis_aws_1_4": "PASS",
+    "cis_aws_1_5": "PASS",
+    "cis_aws_1_6": "PASS"
+  },
+  "source": "AWS IAM API (Mock)",
+  "residency_tag": "Global",
+  "next_check": "2026-03-15T14:30:00Z",
+  "cis_benchmarks": [
+    "CIS AWS v1.5: 1.4",
+    "CIS AWS v1.5: 1.5",
+    "CIS AWS v1.5: 1.6"
+  ],
+  "checksum_sha256": "304f6b12f30c6361bb8b49322421b90ca4fc1f175aaa99d6e29856c9879b4466"
+}
