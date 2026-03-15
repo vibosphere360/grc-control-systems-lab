@@ -1,0 +1,27 @@
+{
+  "control_id": "CC-IAM-01",
+  "evidence_id": "EV-K8S-IAM-01",
+  "status": "PASS",
+  "timestamp": "2026-03-15T20:25:23.426474Z",
+  "message": "Mock mode: RBAC configured with least privilege",
+  "evidence": {
+    "total_clusterroles": 45,
+    "compliant_roles": 43,
+    "violations": 2,
+    "privileged_containers_blocked": true,
+    "host_network_restricted": true,
+    "api_server_permissions_secured": true,
+    "cis_k8s_1_1_1": "PASS",
+    "cis_k8s_1_2_1": "PASS",
+    "cis_k8s_1_2_14": "PASS"
+  },
+  "source": "Kubernetes API Server (Mock)",
+  "residency_tag": "Global",
+  "next_check": "2026-03-21T14:30:00Z",
+  "cis_benchmarks": [
+    "CIS K8s v1.8: 1.1.1",
+    "CIS K8s v1.8: 1.2.1",
+    "CIS K8s v1.8: 1.2.14"
+  ],
+  "checksum_sha256": "0acaaec79451ea821dc5e60f38b784c54ef9024c9ac54d1c7b449b4fc23c86cb"
+}

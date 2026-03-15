@@ -1,0 +1,26 @@
+{
+  "control_id": "CC-LOG-01",
+  "evidence_id": "EV-LOG-01-AWS",
+  "status": "PASS",
+  "timestamp": "2026-03-15T20:36:58.356415Z",
+  "message": "Mock mode: CloudTrail enabled and validating logs",
+  "evidence": {
+    "is_multi_region": true,
+    "log_file_validation": true,
+    "s3_bucket_defined": true,
+    "cloud_watch_logs_defined": true,
+    "kms_encryption": true,
+    "cis_aws_2_1": "PASS",
+    "cis_aws_2_2": "PASS",
+    "cis_aws_2_3": "PASS"
+  },
+  "source": "AWS CloudTrail API (Mock)",
+  "residency_tag": "US",
+  "next_check": "2026-03-14T15:30:00Z",
+  "cis_benchmarks": [
+    "CIS AWS v1.5: 2.1",
+    "CIS AWS v1.5: 2.2",
+    "CIS AWS v1.5: 2.3"
+  ],
+  "checksum_sha256": "7b9e5cb61239d2ad1a05028a0d1105f9cba3f3038c02371b03115c45128b3e22"
+}

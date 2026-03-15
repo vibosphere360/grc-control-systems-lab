@@ -19,6 +19,7 @@ Titilayo's Audit Finding Addressed:
 
 import os
 import json
+import sys
 import hashlib
 from datetime import datetime
 from typing import Dict, Any
@@ -102,5 +103,4 @@ if __name__ == "__main__":
     
     # Save to file for evidence store
     output_file = detector.save_output(result)
-    print(f"\nEvidence saved to: {output_file}")
-    print(f"Checksum: {result.get('checksum_sha256', 'N/A')}")
+
