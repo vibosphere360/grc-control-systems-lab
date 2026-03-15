@@ -26,7 +26,11 @@ This repository demonstrates how modern compliance platforms (Vanta, Drata, Secu
 - **Commercial:** SOC 2 Type II, ISO/IEC 27001:2022
 - **AI Governance:** ISO/IEC 42001:2023, NIST AI RMF (GOVERN/MAP/MEASURE/MANAGE)
 - **Planned:** NIST CSF, PCI DSS 4.0, HIPAA, GDPR/CCPA
-
+### Security Configuration Benchmarks
+- **CIS AWS Foundations Benchmark v1.5:** Mapped to 15+ canonical controls (IAM, Logging, Encryption, Network)
+- **CIS Kubernetes Benchmark v1.8:** Mapped to 10+ canonical controls (RBAC, Network Policies, etcd encryption)
+- **CIS Azure Benchmark v2.0:** Planned for Phase 5
+- **CIS GCP Benchmark v3.0:** Planned for Phase 5
 ## Multi-Cloud Evidence Strategy
 
 This library separates **control objectives** (universal) from **evidence sources** (provider-specific). This enables consistent governance across hybrid environments.
