@@ -18,8 +18,7 @@ This repository demonstrates how modern compliance platforms (Vanta, Drata, Secu
 | **Continuous Monitoring Detectors** | Planned | Terraform + OPA detectors for AWS/Azure/K8s control validation |
 | **AI-Assisted Compliance Guidance** | Planned | Prompt libraries grounded in canonical controls |
 | **Trust Center Architecture** | Planned | Customer-facing artifacts + audit package generation |
-
-## Frameworks Covered
+| **Evidence Automation Framework** | Audit-ready evidence collection | NIST 800-171, CIS | ✅ CSV + detectors |## Frameworks Covered
 
 ### Core Compliance
 - **Federal:** NIST 800-53 Rev 5, NIST 800-171 Rev 2, CMMC 2.0 Level 2, FedRAMP

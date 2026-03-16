@@ -1,0 +1,88 @@
+{
+  "timestamp": "2026-03-16T16:49:19.741768Z",
+  "total_detectors": 3,
+  "passed": 3,
+  "failed": 0,
+  "results": [
+    {
+      "control_id": "CC-LOG-01",
+      "evidence_id": "EV-LOG-01-AWS",
+      "status": "PASS",
+      "timestamp": "2026-03-16T16:49:20.580711Z",
+      "message": "Mock mode: CloudTrail enabled and validating logs",
+      "evidence": {
+        "is_multi_region": true,
+        "log_file_validation": true,
+        "s3_bucket_defined": true,
+        "cloud_watch_logs_defined": true,
+        "kms_encryption": true,
+        "cis_aws_2_1": "PASS",
+        "cis_aws_2_2": "PASS",
+        "cis_aws_2_3": "PASS"
+      },
+      "source": "AWS CloudTrail API (Mock)",
+      "residency_tag": "US",
+      "next_check": "2026-03-14T15:30:00Z",
+      "cis_benchmarks": [
+        "CIS AWS v1.5: 2.1",
+        "CIS AWS v1.5: 2.2",
+        "CIS AWS v1.5: 2.3"
+      ],
+      "checksum_sha256": "7e5c8d6ff4a3883d528b74940622a4d63495250f6b6d90d3b886015d8d20cdfc"
+    },
+    {
+      "control_id": "CC-IAM-02",
+      "evidence_id": "EV-IAM-02-AWS",
+      "status": "PASS",
+      "timestamp": "2026-03-16T16:49:21.057724Z",
+      "message": "Mock mode: MFA enabled for all privileged users",
+      "evidence": {
+        "total_users": 15,
+        "privileged_users": 5,
+        "mfa_enabled_count": 5,
+        "root_mfa_enabled": true,
+        "root_access_keys_disabled": true,
+        "hardware_mfa_for_root": true,
+        "cis_aws_1_4": "PASS",
+        "cis_aws_1_5": "PASS",
+        "cis_aws_1_6": "PASS"
+      },
+      "source": "AWS IAM API (Mock)",
+      "residency_tag": "Global",
+      "next_check": "2026-03-15T14:30:00Z",
+      "cis_benchmarks": [
+        "CIS AWS v1.5: 1.4",
+        "CIS AWS v1.5: 1.5",
+        "CIS AWS v1.5: 1.6"
+      ],
+      "checksum_sha256": "e67f13555969243dfe10b0ff606f88b03b066ef28b0612be45177d7074d6e8ae"
+    },
+    {
+      "control_id": "CC-IAM-01",
+      "evidence_id": "EV-K8S-IAM-01",
+      "status": "PASS",
+      "timestamp": "2026-03-16T16:49:21.790010Z",
+      "message": "Mock mode: RBAC configured with least privilege",
+      "evidence": {
+        "total_clusterroles": 45,
+        "compliant_roles": 43,
+        "violations": 2,
+        "privileged_containers_blocked": true,
+        "host_network_restricted": true,
+        "api_server_permissions_secured": true,
+        "cis_k8s_1_1_1": "PASS",
+        "cis_k8s_1_2_1": "PASS",
+        "cis_k8s_1_2_14": "PASS"
+      },
+      "source": "Kubernetes API Server (Mock)",
+      "residency_tag": "Global",
+      "next_check": "2026-03-21T14:30:00Z",
+      "cis_benchmarks": [
+        "CIS K8s v1.8: 1.1.1",
+        "CIS K8s v1.8: 1.2.1",
+        "CIS K8s v1.8: 1.2.14"
+      ],
+      "checksum_sha256": "afad21e39240fdb6c23b6443d478a0ec17a127388f4563b9a44cdd6b3a705575"
+    }
+  ]
+}
