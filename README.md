@@ -61,6 +61,12 @@ This library is designed for organizations handling Controlled Unclassified Info
 - **CMMC 2.0 Level 2:** Cybersecurity maturity for Defense Industrial Base
 - **Data Residency Tagging:** Controls tagged Global/US/Restricted for boundary enforcement
 
+## Architecture Concepts
+
+- Compliance Operating System (canonical control model)
+- ITAR Segregation Architecture
+- Continuous Monitoring & Evidence Automation 
+
 ## AI Governance Extension
 
 - **NIST AI RMF (2023):** Mapped via GOVERN, MAP, MEASURE, MANAGE functions

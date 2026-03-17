@@ -19,3 +19,280 @@ This module contains automated detectors that validate control state against the
 cd detectors/
 export MOCK_MODE=true
 python3 run_all_detectors.py
+
+markdown
+123456789101112131415161718192021
+# Continuous Monitoring Detectors
+
+This module contains automated detectors that validate control state against the evidence schema defined in Phase 3. Detectors can be run locally, in CI/CD pipelines, or on a schedule via Lambda/Cloud Functions.
+
+**Philosophy:** Compliance is not point-in-time audit preparation — it's continuous operational governance. Each detector outputs timestamped, checksummed evidence with residency tags and control ownership metadata.
+
+---
+
+## Quick Start
+
+
+Run Single Detector
+bash
+1
+Validate Terraform (No Apply)
+bash
+1234
+cd ../terraform
+terraform init
+terraform validate
+terraform plan  # Review only; don't apply unless using real AWS
+Detectors Included
+Detector
+Control
+CIS Benchmark
+Automation Tier
+Freshness
+Residency
+check_cloudtrail.py
+CC-LOG-01
+CIS AWS v1.5: 2.1, 2.2, 2.3
+Automated
+hourly
+US
+check_mfa.py
+CC-IAM-02
+CIS AWS v1.5: 1.4, 1.5, 1.6
+Automated
+daily
+Global
+check_k8s_rbac.py
+CC-IAM-01
+CIS K8s v1.8: 1.1.1, 1.2.1, 1.2.14
+Automated
+weekly
+Global
+Planned Detectors:
+check_encryption.py (CC-ENC-01/02) — KMS key rotation + TLS config
+check_vulnerability.py (CC-VULN-01) — Inspector/Trivy scan results
+check_backup.py (CC-BACKUP-01) — Backup job completion + recovery tests
+check_network_seg.py (CC-SEG-01) — VPC flow logs + firewall rules (ITAR)
+Evidence Output Format
+Each detector returns standardized JSON with governance metadata:
+json
+123456789101112131415161718192021222324
+{
+  "control_id": "CC-LOG-01",
+  "evidence_id": "EV-LOG-01-AWS",
+  "status": "PASS",
+  "timestamp": "2026-03-16T16:49:19Z",
+  "message": "CloudTrail enabled and validating logs",
+  "evidence": {
+    "is_multi_region": true,
+    "log_file_validation": true,
+    "s3_bucket_defined": true,
+
+Key Fields for Governance:
+Field
+Purpose
+Example
+residency_tag
+Enforces data boundary requirements
+US, Restricted, Global
+control_owner
+Designated owner for remediation
+SecOps Lead, Security Architect
+escalation_path
+Escalation chain for FAIL status
+CISO → Legal → Board
+checksum_sha256
+Integrity verification for auditors
+SHA-256 hash of JSON output
+freshness
+SLA for next collection
+hourly, daily, weekly
+Evidence Ownership & Delivery Flow
+Output
+Owner
+Storage
+Access
+Retention
+Detector JSON
+Detector Script
+Local outputs/ (ephemeral)
+Developer
+24 hours
+Evidence File
+Control Owner
+S3 / ServiceNow / OSCAL
+Control Owner + Assessor
+3-7 years
+Aggregated Package
+GRC Lead
+FedRAMP Submission Portal
+FedRAMP + Agency
+7 years
+Dashboard Metrics
+SecOps
+Grafana / QuickSight
+Leadership Team
+90 days
+Flow Diagram
+1234567891011
+Residency Enforcement
+residency_tag = "US" → S3 bucket in us-east-1 only (FedRAMP)
+residency_tag = "Restricted" → S3 bucket with CUI controls + access logging (ITAR)
+residency_tag = "Global" → Any approved region (commercial)
+Integrity Verification
+Every evidence file includes:
+SHA-256 checksum in output JSON
+Timestamp + detector version
+Immutable storage option (S3 Object Lock for CUI)
+Access logging via CloudTrail / Azure Monitor
+Terraform Infrastructure
+Deploy AWS Config rules for continuous monitoring:
+bash
+12345
+cd terraform/
+terraform init
+terraform validate
+terraform plan
+# Review plan; apply only if using real AWS account with proper IAM permissions
+Tags Applied to All Resources
+Tag
+Purpose
+Example
+ControlID
+Maps to canonical control library
+CC-LOG-01
+EvidenceID
+Maps to evidence dictionary
+EV-LOG-01-AWS
+ResidencyTag
+Enforces data boundary requirements
+US, Restricted
+CISBenchmark
+Tracks CIS AWS Foundations Benchmark coverage
+CIS AWS v1.5: 2.1
+AutomationTier
+Indicates automation level
+Automated, Partial, Manual
+Cost Estimate
+Resource
+Monthly Cost (USD)
+Notes
+AWS Config Rules
+~$25
+6 rules @ ~$4/rule
+S3 Storage (evidence)
+~$5
+10 GB @ $0.023/GB
+CloudWatch Logs
+~$10
+Detector execution logs
+Total
+~$40/month
+vs. $16K/month ServiceNow GRC
+Addressing Common Audit Findings
+This module directly addresses audit failures identified by practitioners (Titilayo Adamu, Kimly Hong):
+Audit Finding
+How This Module Addresses It
+Access reviews documented but not performed
+Detectors validate MFA/RBAC daily with timestamped evidence
+Policies exist but not enforced
+Automated validation checks actual state vs. policy
+Evidence missing at audit time
+Continuous collection + checksummed output
+Risk registers not updated
+Detector output can feed risk register updates via API
+Vendor reviews incomplete
+CC-VENDOR-01 evidence schema tracks third-party assessments
+ITAR boundaries not enforced
+residency_tag = "Restricted" enforces CUI boundary at collection layer
+AI governance siloed
+CC-AI-* controls follow same architecture as core controls
+Real-Time Compliance Dashboard (Planned)
+Detector output feeds a live dashboard showing:
+Metric
+Description
+Example
+Overall Posture
+% controls PASS/FAIL by framework
+"NIST 800-171: 92% PASS, 8% FAIL"
+ITAR Boundary Status
+Restricted-zone controls green/red
+"CC-SEG-01: ✅ PASS (no cross-zone routing)"
+Evidence Freshness
+Last collection timestamp per control
+"EV-LOG-01: collected 2 hours ago (hourly SLA)"
+Risk Exposure
+High-risk controls with FAIL status highlighted
+"RISK-AI-01: CC-AI-02 FAIL → escalation triggered"
+Tech Stack Options
+Option
+Cost
+Setup Time
+Best For
+Grafana + Prometheus
+~$50/month (self-hosted)
+1-2 weeks
+Startups, cost-conscious teams
+AWS QuickSight
+~$200/month (managed)
+3-5 days
+AWS-native environments
+ServiceNow Performance Analytics
+Included in GRC license
+1-2 weeks
+Enterprise ServiceNow customers
+Sample Query (Grafana/Prometheus)
+promql
+12
+Interview Talking Point
+"Compliance isn't point-in-time — it's continuous. My detector output can feed a real-time dashboard showing ITAR boundary status, evidence freshness, and risk exposure. For AnySignal, I'd deploy Grafana in Week 1 so leadership always knows our compliance posture — no waiting for quarterly audit reports."
+Extensibility
+To Add a New Detector
+Create detectors/check_<control>.py following the standard output schema
+Add CIS Benchmark mappings to docstring
+Add control_owner and escalation_path fields
+Add to run_all_detectors.py detector list
+Update this README
+To Add a New Provider
+Create provider-specific evidence file in evidence-dictionary/
+Implement detector using provider's API/CLI (e.g., az for Azure, gcloud for GCP)
+Add Terraform module in terraform/ if applicable
+Update multi-cloud evidence table in main README
+Example: Azure MFA Detector
+python
+1234567891011
+# detectors/check_mfa_azure.py
+import subprocess
+import json
+
+def check_azure_mfa():
+    result = subprocess.run(
+        ["az", "ad", "user", "list", "--query", "[].{user:userPrincipalName,mfa:signInActivity}"],
+        capture_output=True,
+        text=True
+    )
+
+Integration with Risk Register
+Detector output integrates with the unified risk register (../risk-register.md):
+Risk ID
+Linked Controls
+Detector Output → Risk Update
+RISK-ITAR-01
+CC-SEG-01, CC-EXPORT-01, CC-PERSONNEL-01
+FAIL → Risk exposure score increases → Legal notified
+RISK-AI-01
+CC-AI-01, CC-AI-02, CC-AI-03
+FAIL → Model deployment blocked → AI Ethics Board notified
+RISK-CLOUD-01
+CC-ENC-01, CC-LOG-01, CC-BACKUP-01
+FAIL → Cloud security posture degraded → CISO notified
+Automated Risk Update Flow
+1
+Detector FAIL → Webhook → ServiceNow GRC → Risk Register Updated → Escalation Triggered
+Author
+Victor Adeleke
+FedRAMP Certification Manager | Cloud Compliance Engineer | HSM & PKI Governance
+Portfolio: grcsecuritycontrols.com
+GitHub: github.com/vibosphere360/grc-control-systems-lab
+LinkedIn: linkedin.com/in/victor-adeleke-214083177
+Email: victorsreops@gmail.com
