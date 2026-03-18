@@ -1,48 +1,17 @@
-# Continuous Monitoring Detectors
-
-This module contains automated detectors that validate control state against the evidence schema defined in Phase 3. Detectors can be run locally, in CI/CD pipelines, or on a schedule via Lambda/Cloud Functions.
-
-**Philosophy:** Compliance is not point-in-time audit preparation — it's continuous operational governance. Each detector outputs timestamped, checksummed evidence with residency tags and control ownership metadata.
-
----
-
-## Quick Start
-
-### Prerequisites
-- Python 3.8+
-- AWS CLI configured (`aws configure`) for real mode
-- kubectl configured (for Kubernetes detectors)
-- Terraform 1.0+ (for IaC deployment)
-
-### Run All Detectors (Mock Mode)
-```bash
-cd detectors/
-export MOCK_MODE=true
-python3 run_all_detectors.py
-
 markdown
-123456789101112131415161718192021
-# Continuous Monitoring Detectors
-
-This module contains automated detectors that validate control state against the evidence schema defined in Phase 3. Detectors can be run locally, in CI/CD pipelines, or on a schedule via Lambda/Cloud Functions.
-
-**Philosophy:** Compliance is not point-in-time audit preparation — it's continuous operational governance. Each detector outputs timestamped, checksummed evidence with residency tags and control ownership metadata.
-
----
-
-## Quick Start
-
+1234567891011121314151617181920212223
+# Continuous Monitoring DetectorsThis module contains automated detectors that validate control state against the evidence schema defined in Phase 3. Detectors can be run locally, in CI/CD pipelines, or on a schedule via Lambda/Cloud Functions.**Philosophy:** Compliance is not point-in-time audit preparation — it's continuous operational governance. Each detector outputs timestamped, checksummed evidence with residency tags and control ownership metadata.---## Quick Start### Prerequisites- Python 3.8+- AWS CLI configured (`aws configure`) for real mode- kubectl configured (for Kubernetes detectors)- Terraform 1.0+ (for IaC deployment)### Run All Detectors (Mock Mode)```bashcd detectors/export MOCK_MODE=truepython3 run_all_detectors.py
 
 Run Single Detector
 bash
 1
+python3 check_cloudtrail.py
+
 Validate Terraform (No Apply)
 bash
 1234
-cd ../terraform
-terraform init
-terraform validate
-terraform plan  # Review only; don't apply unless using real AWS
+cd ../terraformterraform initterraform validateterraform plan
+
 Detectors Included
 Detector
 Control
@@ -74,39 +43,33 @@ check_vulnerability.py (CC-VULN-01) — Inspector/Trivy scan results
 check_backup.py (CC-BACKUP-01) — Backup job completion + recovery tests
 check_network_seg.py (CC-SEG-01) — VPC flow logs + firewall rules (ITAR)
 Evidence Output Format
-Each detector returns standardized JSON with governance metadata:
+Each detector returns standardized JSON with governance metadata. Here's actual output from running python3 check_cloudtrail.py:
 json
-123456789101112131415161718192021222324
-{
-  "control_id": "CC-LOG-01",
-  "evidence_id": "EV-LOG-01-AWS",
-  "status": "PASS",
-  "timestamp": "2026-03-16T16:49:19Z",
-  "message": "CloudTrail enabled and validating logs",
-  "evidence": {
-    "is_multi_region": true,
-    "log_file_validation": true,
-    "s3_bucket_defined": true,
+1234567891011121314151617181920212223242526
+{  "control_id": "CC-LOG-01",  "evidence_id": "EV-LOG-01-AWS",  "status": "PASS",  "timestamp": "2026-03-16T20:14:48.049602Z",  "message": "Mock mode: CloudTrail enabled and validating logs",  "evidence": {    "is_multi_region": true,    "log_file_validation": true,    "s3_bucket_defined": true,    "cloud_watch_logs_defined": true,    "kms_encryption": true,    "cis_aws_2_1": "PASS",    "cis_aws_2_2": "PASS",    "cis_aws_2_3": "PASS"  },  "source": "AWS CloudTrail API (Mock)",  "residency_tag": "US",  "next_check": "2026-03-14T15:30:00Z",  "cis_benchmarks": [    "CIS AWS v1.5: 2.1",    "CIS AWS v1.5: 2.2",    "CIS AWS v1.5: 2.3"  ],  "checksum_sha256": "02d66d311ec4dbdec764d88b0b9490cd7189879e6d9c2a9e56d989eb9d1f88df"}
 
 Key Fields for Governance:
 Field
 Purpose
-Example
+Example from Output
 residency_tag
 Enforces data boundary requirements
-US, Restricted, Global
+"US" → FedRAMP-compliant region only
 control_owner
 Designated owner for remediation
-SecOps Lead, Security Architect
+SecOps Lead (in evidence_schema.csv)
 escalation_path
 Escalation chain for FAIL status
 CISO → Legal → Board
 checksum_sha256
 Integrity verification for auditors
-SHA-256 hash of JSON output
+02d66d311ec4dbdec764d88b0b9490cd7189879e6d9c2a9e56d989eb9d1f88df
+cis_benchmarks
+CIS AWS Foundations Benchmark mappings
+2.1, 2.2, 2.3 (CloudTrail controls)
 freshness
 SLA for next collection
-hourly, daily, weekly
+hourly (next_check timestamp)
 Evidence Ownership & Delivery Flow
 Output
 Owner
@@ -133,8 +96,10 @@ SecOps
 Grafana / QuickSight
 Leadership Team
 90 days
-Flow Diagram
+Flow Diagram:
 1234567891011
+Detector Script (Python)    ↓Standardized JSON Output (with checksum + residency tag)    ↓Evidence Store (S3 with Object Lock for CUI)    ↓GRC Platform (ServiceNow GRC / Archer)    ↓Dashboard (Grafana / QuickSight)    ↓Assessor Review (3PAO / FedRAMP)
+
 Residency Enforcement
 residency_tag = "US" → S3 bucket in us-east-1 only (FedRAMP)
 residency_tag = "Restricted" → S3 bucket with CUI controls + access logging (ITAR)
@@ -148,12 +113,9 @@ Access logging via CloudTrail / Azure Monitor
 Terraform Infrastructure
 Deploy AWS Config rules for continuous monitoring:
 bash
-12345
-cd terraform/
-terraform init
-terraform validate
-terraform plan
-# Review plan; apply only if using real AWS account with proper IAM permissions
+1234
+cd terraform/terraform initterraform validateterraform plan
+
 Tags Applied to All Resources
 Tag
 Purpose
@@ -244,6 +206,8 @@ Enterprise ServiceNow customers
 Sample Query (Grafana/Prometheus)
 promql
 12
+# Show % of ITAR controls PASS in last 24 hourssum(residency_tag="Restricted" and status="PASS") / sum(residency_tag="Restricted") * 100
+
 Interview Talking Point
 "Compliance isn't point-in-time — it's continuous. My detector output can feed a real-time dashboard showing ITAR boundary status, evidence freshness, and risk exposure. For AnySignal, I'd deploy Grafana in Week 1 so leadership always knows our compliance posture — no waiting for quarterly audit reports."
 Extensibility
@@ -261,16 +225,7 @@ Update multi-cloud evidence table in main README
 Example: Azure MFA Detector
 python
 1234567891011
-# detectors/check_mfa_azure.py
-import subprocess
-import json
-
-def check_azure_mfa():
-    result = subprocess.run(
-        ["az", "ad", "user", "list", "--query", "[].{user:userPrincipalName,mfa:signInActivity}"],
-        capture_output=True,
-        text=True
-    )
+# detectors/check_mfa_azure.pyimport subprocessimport jsondef check_azure_mfa():    result = subprocess.run(        ["az", "ad", "user", "list", "--query", "[].{user:userPrincipalName,mfa:signInActivity}"],        capture_output=True,        text=True    )    # Parse and return standardized JSON output
 
 Integration with Risk Register
 Detector output integrates with the unified risk register (../risk-register.md):
@@ -288,7 +243,8 @@ CC-ENC-01, CC-LOG-01, CC-BACKUP-01
 FAIL → Cloud security posture degraded → CISO notified
 Automated Risk Update Flow
 1
-Detector FAIL → Webhook → ServiceNow GRC → Risk Register Updated → Escalation Triggered
+Detector FAIL → Webhook → ServiceNow GRC → Risk Register Updated → Escalation Triggered
+
 Author
 Victor Adeleke
 FedRAMP Certification Manager | Cloud Compliance Engineer | HSM & PKI Governance
