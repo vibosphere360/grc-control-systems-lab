@@ -18,6 +18,3 @@ This document demonstrates how canonical controls map to business risks — enab
 3. **Dashboard alert** → High-risk FAIL triggers escalation to owner
 4. **Remediation tracked** → POA&M updated in ServiceNow GRC
 
-## Interview Talking Point
-
-> "Controls don't exist in isolation — they mitigate business risks. My unified risk register ties CC-SEG-01 to ITAR violation risk, CC-AI-02 to model bias risk, etc. This lets leadership see compliance as risk reduction, not checkbox completion. For AnySignal, I'd customize this register based on your actual RF systems, export classification, and contract obligations."
